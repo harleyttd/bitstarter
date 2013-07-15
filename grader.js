@@ -65,7 +65,14 @@ var processMain = function(program){
   var isUrl = program.url && program.url.length > 0;
 
   if (isUrl) {
-
+    var rest = require('restler');
+    rest.get(program.url).on('complete', function(result){
+      var outfile = "temp.html";
+      fs.writeFileSync(outfile, result);
+      var checkJson = checkHtmlFile(outfile, program.checks);
+      var outJson = JSON.stringify(checkJson, null, 4);
+      console.log(outJson);
+    })
   }
   else {
     var checkJson = checkHtmlFile(program.file, program.checks);
